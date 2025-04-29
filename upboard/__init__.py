@@ -3,7 +3,7 @@ Update-Board is a lightweight CLI tool for managing and delivering updated versi
 """
 
 __version__ = "0.0.1"
-__status__  = "beta0"
+__status__  = "beta1"
 __author__  = "zero <zero.kwok@foxmail.com>"
 
 projectName    = 'upboard'
