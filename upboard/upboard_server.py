@@ -90,10 +90,10 @@ def create_app(base_dir='assets', password=None):
     return app
 
 def main():
-    parser = argparse.ArgumentParser(description='Simple Static Resource Server')
+    parser = argparse.ArgumentParser(description='UpBoard - Lightweight Software Update Server')
     parser.add_argument('--host', default='0.0.0.0', help='Host to bind to (default: 0.0.0.0)')
     parser.add_argument('--port', type=int, default=5000, help='Port to listen on (default: 5000)')
-    parser.add_argument('--dir', default='.', help='Base directory to serve files from (default: current directory)')
+    parser.add_argument('--dir', default='.', help='Base directory for releases (default: current directory)')
     parser.add_argument('--password', help='Password for publish API (optional)')
     args = parser.parse_args()
 
@@ -107,17 +107,18 @@ def main():
     print(f"Server running on http://{args.host}:{args.port}")
     print("GET /api/v1/updates/<product>/<platform>/[<version>/]<filename>")
     print("PUT /api/v1/releases/<product>/<platform>/[<version>/]<filename>")
-    print("PUT: curl -X PUT -H 'Authorization: admin' -F file=@RELEASES http://host:port/api/v1/releases/vlocation/win32/x64/1.0.0-alpha2/RELEASES")
+    print("PUT: curl -X PUT -H 'Authorization: admin' -F  file=@RELEASES\\\n"
+          "     http://host:port/api/v1/releases/vlocation/win32/x64/1.0.0-alpha2/RELEASES")
     if args.password:
         print("Publish API authentication is ENABLED")
     else:
         print("Publish API authentication is DISABLED")
     print("Press Ctrl+C to quit")
 
-    if app.config['ENV'] == 'production':
-        serve(app, host=args.host, port=args.port)
-    else:
+    if app.config.get("ENV", "production") == "development":
         app.run(host=args.host, port=args.port, debug=True)
+    else:
+        serve(app, host=args.host, port=args.port)
 
 if __name__ == '__main__':
     main()

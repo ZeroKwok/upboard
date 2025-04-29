@@ -44,5 +44,5 @@ Homepage = "https://github.com/ZeroKwok/upboard"
 Issues = "https://github.com/ZeroKwok/upboard/issues"
 
 [project.scripts]
-upboard_server = "upboard.upboard_server.py:main"
+upboard_server = "upboard.upboard_server:main"
 upboard_publish = "upboard.upboard_publish:main"

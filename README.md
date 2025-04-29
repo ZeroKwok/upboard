@@ -1,6 +1,6 @@
 # upboard
 
-Update-Board is a lightweight CLI tool for managing and delivering updated versions of applications during testing.
+upboard (Update-Board) is a lightweight CLI tool for managing and delivering updated versions of applications during testing.
 
 **upboard** helps you distribute software updates to clients by providing a simple HTTP server (`upboard-server`) and a   file publisher (`upboard-publish`). Applications can check for and download updates dynamically at runtime using standard HTTP requests.
 
