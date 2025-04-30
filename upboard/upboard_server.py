@@ -12,21 +12,7 @@ from waitress import serve
 from pathlib import Path
 from functools import wraps
 
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(message)s',
-    datefmt='%m%d-%H:%M:%S',
-    handlers=[
-        TimedRotatingFileHandler(
-            filename='upboard.server.log',
-            when='midnight',     # Rotate at midnight
-            interval=1,          # Daily rotation
-            backupCount=7,       # Keep 7 days of logs
-        ),
-        logging.StreamHandler()  # Also log to console
-    ]
-)
-logger = logging.getLogger('upboard.server')
+logger = logging.getLogger("upboard.server")
 
 def create_app(base_dir='assets', password=None):
     app = Flask(__name__)
@@ -143,8 +129,25 @@ def main():
         logging.error(f"Directory does not exist: {args.dir}")
         os.exit(1)
 
-    app = create_app(args.dir, args.password)
+    # Set up logging
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s - %(message)s",
+        datefmt="%m%d-%H:%M:%S",
+        handlers=[
+            TimedRotatingFileHandler(
+                filename=os.path.join(args.dir, "upboard.server.log"),
+                when="midnight",  # Rotate at midnight
+                interval=1,  # Daily rotation
+                backupCount=7,  # Keep 7 days of logs
+                delay=True,  # Delay file creation until the first log message
+            ),
+            logging.StreamHandler(),  # Also log to console
+        ],
+    )
 
+    # Create the Flask app
+    app = create_app(args.dir, args.password)
     if args.debug:
         app.config['ENV'] = 'development'
         app.config['DEBUG'] = True
