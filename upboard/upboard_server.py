@@ -133,7 +133,7 @@ def main():
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s - %(message)s",
-        datefmt="%m%d-%H:%M:%S",
+        datefmt="%m%d %H:%M:%S",
         handlers=[
             TimedRotatingFileHandler(
                 filename=os.path.join(args.dir, "upboard.server.log"),

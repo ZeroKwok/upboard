@@ -10,7 +10,7 @@ from   pathlib import Path
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(message)s',
-    datefmt='%m%d-%H:%M:%S'
+    datefmt='%m%d %H:%M:%S'
 )
 logger = logging.getLogger('upboard.publish')
 
@@ -89,10 +89,7 @@ Example:
     args = parser.parse_args()
 
     if args.verbose:
-        logger.setLevel(logging.DEBUG)
-        requests_log = logging.getLogger("requests.packages.urllib3")
-        requests_log.setLevel(logging.DEBUG)
-        requests_log.propagate = True
+        logging.getLogger().setLevel(logging.DEBUG)
 
     path = Path(args.path)
     if path.is_file():
