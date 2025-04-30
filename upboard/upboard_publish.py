@@ -73,8 +73,16 @@ def upload_directory(base_url, dir_path, password=None):
         return success_count
 
 def main():
-    parser = argparse.ArgumentParser("UpBoard Client - Upload files to upboard server")
-    parser.add_argument("url", help="Upload base URL (e.g., http://host:port/api/v1/board/vlocation/win32/x64/1.0.0/)")
+    parser = argparse.ArgumentParser(
+        description="""UpBoard Client - Upload files to upboard server.
+
+Example:
+  upboard_publish http://host:port/api/v1/releases/your-project/win32/x64/1.0.0/ ./file_or_directory -p admin
+""",
+        formatter_class=argparse.RawTextHelpFormatter,
+    )
+
+    parser.add_argument("url", help="Upload base URL (e.g., http://host:port/api/v1/releases/your-project/win32/x64/1.0.0/)")
     parser.add_argument("path", help="Path to the file or directory to upload")
     parser.add_argument("-p", "--password", default="admin", help="Authorization password")
     parser.add_argument("-v", "--verbose", action="store_true", help="Enable verbose output")
