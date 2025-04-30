@@ -20,7 +20,7 @@ def create_app(base_dir='assets', password=None):
     # 基础配置
     app.config.update({
         'UPLOAD_PASSWORD': password,
-        'UPLOADED_FILES_DEST': Path(base_dir).resolve() / 'releases',
+        'UPLOADED_FILES_DEST': Path(base_dir).resolve() / 'RELEASES',
         'MAX_CONTENT_LENGTH': 200 * 1024 * 1024,  # 200MB 文件大小限制
         'JSONIFY_PRETTYPRINT_REGULAR': True,
         'JSON_SORT_KEYS': False
