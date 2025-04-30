@@ -12,7 +12,7 @@ logging.basicConfig(
     format='%(asctime)s - %(message)s',
     datefmt='%m%d-%H:%M:%S'
 )
-logger = logging.getLogger('upboard_publish')
+logger = logging.getLogger('upboard.publish')
 
 def upload_file(url, file_path, password=None):
     """
