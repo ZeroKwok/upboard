@@ -125,10 +125,6 @@ def main():
     parser.add_argument('--debug', action='store_true', help='Enable debug mode')
     args = parser.parse_args()
 
-    if not os.path.exists(args.dir):
-        logging.error(f"Directory does not exist: {args.dir}")
-        os.exit(1)
-
     # Set up logging
     logging.basicConfig(
         level=logging.INFO,
@@ -145,6 +141,10 @@ def main():
             logging.StreamHandler(),  # Also log to console
         ],
     )
+
+    if not os.path.exists(args.dir):
+        os.makedirs(args.dir, exist_ok=True)
+        logging.warn(f"Directory does not exist, try creating: {args.dir}")
 
     # Create the Flask app
     app = create_app(args.dir, args.password)
