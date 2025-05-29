@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import os
-import json
 import argparse
 import logging
 from logging.handlers import TimedRotatingFileHandler
@@ -107,7 +106,7 @@ def create_app(base_dir='assets', password=None):
             version_path = os.path.join(direcory, product, platform, arch, version, filename)
             if os.path.exists(version_path):
                 return send_from_directory(os.path.join(direcory, product, platform, arch, version), filename)
-        
+
         # 如果带版本号的路径不存在，尝试不带版本号的路径
         no_version_path = os.path.join(direcory, product, platform, arch, filename)
         if os.path.exists(no_version_path):
@@ -124,7 +123,6 @@ def main():
     parser.add_argument('-d', '--dir', default='.', help='Base directory for releases (default: current directory)')
     parser.add_argument('-p', '--password', help='Password for publish API (optional)')
     parser.add_argument('--debug', action='store_true', help='Enable debug mode')
-    parser.add_argument('--config', default=None, help='Configuration file (JSON format, optional, default: None)')
     args = parser.parse_args()
 
     # Set up logging
@@ -144,26 +142,9 @@ def main():
         ],
     )
 
-    config = {
-        "host": "0.0.0.0",
-        "port": 5001,
-        "dir": ".",
-        "password": "",
-    }
-
-    if args.config:
-        if not os.path.exists(args.config):
-            logging.warning(f"The config does not exist, try creating: {args.config}")
-            with open(args.config, "w") as f:
-                json.dump(config, f)
-        else:
-            with open(args.config, "r") as f:
-                config.update(json.load(f))
-
-
     if not os.path.exists(args.dir):
-        os.makedirs(args.dir, exist_ok=True)
-        logging.warning(f"Directory does not exist, try creating: {args.dir}")
+        logging.error(f"Directory does not exist: {args.dir}")
+        os.exit(1)
 
     # Create the Flask app
     app = create_app(args.dir, args.password)
@@ -177,9 +158,9 @@ def main():
     logger.info(f"Serving releases from: {Path(args.dir).resolve()}")
     logger.info("API Endpoints:")
     logger.info(" GET /api/v1/updates/<product>/<platform>/[<version>/]<filename>")
-    logger.info(" PUT /api/v1/releases/<product>/<platform>/[<version>/]<filename>")
+    logger.info(" PUT /api/v1/releases/<product>/<platform>/[<version>/]")
     logger.info(" PUT: curl -X PUT -H 'Authorization: admin' -F  file=@RELEASES \\")
-    logger.info("      http://host:port/api/v1/releases/vlocation/win32/x64/1.0.0-alpha2/RELEASES")
+    logger.info("      http://{args.host}:{args.port}/api/v1/releases/your-project/win32/x64/RELEASES")
 
     if args.password:
         logger.info("Publish API authentication is ENABLED")
