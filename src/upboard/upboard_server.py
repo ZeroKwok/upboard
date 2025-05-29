@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import json
 import argparse
 import logging
 from logging.handlers import TimedRotatingFileHandler
@@ -119,10 +120,11 @@ def create_app(base_dir='assets', password=None):
 def main():
     parser = argparse.ArgumentParser(description='UpBoard - Lightweight Software Update Server')
     parser.add_argument('-H', '--host', default='0.0.0.0', help='Host to bind to (default: 0.0.0.0)')
-    parser.add_argument('-P', '--port', type=int, default=5000, help='Port to listen on (default: 5000)')
+    parser.add_argument('-P', '--port', type=int, default=5001, help='Port to listen on (default: 5001)')
     parser.add_argument('-d', '--dir', default='.', help='Base directory for releases (default: current directory)')
     parser.add_argument('-p', '--password', help='Password for publish API (optional)')
     parser.add_argument('--debug', action='store_true', help='Enable debug mode')
+    parser.add_argument('--config', default=None, help='Configuration file (JSON format, optional, default: None)')
     args = parser.parse_args()
 
     # Set up logging
@@ -142,9 +144,26 @@ def main():
         ],
     )
 
+    config = {
+        "host": "0.0.0.0",
+        "port": 5001,
+        "dir": ".",
+        "password": "",
+    }
+
+    if args.config:
+        if not os.path.exists(args.config):
+            logging.warning(f"The config does not exist, try creating: {args.config}")
+            with open(args.config, "w") as f:
+                json.dump(config, f)
+        else:
+            with open(args.config, "r") as f:
+                config.update(json.load(f))
+
+
     if not os.path.exists(args.dir):
         os.makedirs(args.dir, exist_ok=True)
-        logging.warn(f"Directory does not exist, try creating: {args.dir}")
+        logging.warning(f"Directory does not exist, try creating: {args.dir}")
 
     # Create the Flask app
     app = create_app(args.dir, args.password)

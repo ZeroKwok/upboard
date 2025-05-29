@@ -36,6 +36,13 @@ dependencies = [
 ]
 dynamic = ["version"]
 
+[tool.setuptools]
+package-dir = {"upboard" = "src/upboard"}
+packages = ["upboard"]
+
+[tool.setuptools.package-data]
+upboard = ["etc/systemd/*.service"]
+
 [tool.setuptools.dynamic]
 version = {attr = "upboard.projectVersion"}
 

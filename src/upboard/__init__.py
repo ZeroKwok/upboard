@@ -3,10 +3,10 @@ Update-Board is a lightweight CLI tool for managing and delivering updated versi
 """
 
 __version__ = "0.0.1"
-__status__  = "beta2"
+__status__  = "beta3"
 __author__  = "zero <zero.kwok@foxmail.com>"
 
 projectName    = 'upboard'
 projectHome    = 'https://github.com/ZeroKwok/upboard.git'
-projectVersion = f'{__version__} {__status__}'
+projectVersion = f'{__version__} {__status__}'.strip()
 projectAuthor  = __author__

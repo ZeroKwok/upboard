@@ -12,8 +12,8 @@ After=network.target
 #LimitNOFILE=65535
 Type=simple
 WorkingDirectory=%h
-ExecStart=upboard-server 
-Restart=always
+ExecStart=upboard-server --dir %h/upboard --config %h/upboard/config.json
+Restart=on-failure
 
 # Some distributions may not support these hardening directives. If you cannot start the service due
 # to an unknown option, comment out the ones not supported by your version of systemd.
