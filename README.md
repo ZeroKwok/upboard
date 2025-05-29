@@ -1,6 +1,6 @@
 # upboard
 
-upboard (Update-Board) is a lightweight CLI tool for managing and delivering updated versions of applications during testing.
+upboard (Update-Board) is a lightweight CLI tool used to manage and deliver updated versions of applications during development.
 
 **upboard** helps you distribute software updates to clients by providing a simple HTTP server (`upboard-server`) and a   file publisher (`upboard-publish`). Applications can check for and download updates dynamically at runtime using standard HTTP requests.
 
@@ -28,8 +28,8 @@ upboard-server --dir ./release-dir --port 5001 --password mysecret
 You can run upboard as a systemd service on Linux systems:
 
 ```bash
-# 1. Copy the service file to systemd directory:
-sudo cp etc/systemd/upboard.service /etc/systemd/system/
+# 1. Copy and modify the service file to systemd directory:
+sudo cp src/etc/systemd/upboard.service /etc/systemd/system/
 
 # 2. Reload systemd daemon:
 sudo systemctl daemon-reload
@@ -70,13 +70,13 @@ To run upboard as a Windows service, you can use NSSM (Non-Sucking Service Manag
 ### Upload a file
 
 ```bash
-upboard-publish --password mysecret http://localhost:5001/api/v1/releases/win32/x64/1.2.3-beta/ your-release-file
+upboard-publish --password mysecret http://localhost:5001/api/v1/releases/win32/x64/ your-release-file
 ```
 
 ### Check for updates (client-side, GET request)
 
 ```http
-GET /api/v1/updates/your-project/win32/x64/1.2.3-beta/your-release-file
+GET /api/v1/updates/your-project/win32/x64/your-release-file
 ```
 
 ## 📁 API Overview

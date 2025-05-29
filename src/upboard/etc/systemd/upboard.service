@@ -4,23 +4,11 @@ After=syslog.target
 After=network.target
 
 [Service]
-# Modify these two values and uncomment them if you have
-# repos with lots of files and get an HTTP error 500 because
-# of that
-###
-#LimitMEMLOCK=infinity
-#LimitNOFILE=65535
 Type=simple
-WorkingDirectory=%h
-ExecStart=upboard-server --dir %h/upboard --config %h/upboard/config.json
+WorkingDirectory=/var/local
+ExecStartPre=/bin/mkdir -p /var/local/upboard
+ExecStart=upboard-server --dir upboard --host 0.0.0.0 --port 5001 --password admin
 Restart=on-failure
-
-# Some distributions may not support these hardening directives. If you cannot start the service due
-# to an unknown option, comment out the ones not supported by your version of systemd.
-ProtectSystem=full
-PrivateDevices=yes
-PrivateTmp=yes
-NoNewPrivileges=true
 
 [Install]
 WantedBy=multi-user.target
