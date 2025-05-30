@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import shutil
 import argparse
 import logging
 from logging.handlers import TimedRotatingFileHandler
@@ -71,7 +72,10 @@ def create_app(base_dir='assets', password=None):
             # 处理已存在文件
             oldfile = os.path.join(app.config['UPLOADED_FILES_DEST'], save_dir, filename)
             if os.path.exists(oldfile):
-                os.remove(oldfile)
+                if os.path.isdir(oldfile):
+                    shutil.rmtree(oldfile)
+                else:
+                    os.remove(oldfile)
 
             # 保存文件（自动创建目录）
             saved_filename = files.save(
@@ -156,11 +160,19 @@ def main():
 
     logger.info(f"UpBoard server starting on http://{args.host}:{args.port}")
     logger.info(f"Serving releases from: {Path(args.dir).resolve()}")
-    logger.info("API Endpoints:")
-    logger.info(" GET /api/v1/updates/<product>/<platform>/[<version>/]<filename>")
-    logger.info(" PUT /api/v1/releases/<product>/<platform>/[<version>/]")
-    logger.info(" PUT: curl -X PUT -H 'Authorization: admin' -F  file=@RELEASES \\")
-    logger.info("      http://{args.host}:{args.port}/api/v1/releases/your-project/win32/x64/RELEASES")
+    logger.info(f"")
+    logger.info(f"API Endpoints:")
+    logger.info(f" GET /api/v1/updates/<product>/<platform>/[<version>/]<filename>")
+    logger.info(f" PUT /api/v1/releases/<product>/<platform>/[<version>/]<filename>")
+    logger.info(f"")
+    logger.info(f"PUT Example:")
+    logger.info(f" 1. upboard_publish -p admin\\")
+    logger.info(f"      http://127.0.0.1:{args.port}/api/v1/releases/your-project/win32/x64/ ./RELEASES")
+    logger.info(f" 2. curl -X PUT -H 'Authorization: admin' -F file=@RELEASES \\")
+    logger.info(f"      http://127.0.0.1:{args.port}/api/v1/releases/your-project/win32/x64/RELEASES")
+    logger.info(f"GET Example:")
+    logger.info(f" 1. curl http://127.0.0.1:{args.port}/api/v1/updates/your-project/win32/x64/RELEASES")
+    logger.info(f"")
 
     if args.password:
         logger.info("Publish API authentication is ENABLED")
